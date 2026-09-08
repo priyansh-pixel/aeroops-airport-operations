@@ -12,7 +12,7 @@ function Incidents() {
 
   const [form, setForm] = useState({
     title: "",
-    flight: "",
+    flight_number: "",
     severity: "Medium",
     team: "",
   });
@@ -38,23 +38,34 @@ function Incidents() {
     });
   }
 
-  function reportIncident(event) {
+  async function reportIncident(event) {
     event.preventDefault();
 
-    if (!form.title || !form.flight || !form.team) {
+    if (
+      !form.title ||
+      !form.flight_number ||
+      !form.team
+    ) {
       alert("Please complete all fields.");
       return;
     }
 
-    addIncident({
-      id: `INC-${String(incidents.length + 1).padStart(3, "0")}`,
-      ...form,
+    const incidentCode = `INC-${String(
+      incidents.length + 1
+    ).padStart(3, "0")}`;
+
+    await addIncident({
+      incident_code: incidentCode,
+      title: form.title,
+      flight_number: form.flight_number,
+      severity: form.severity,
+      team: form.team,
       status: "Open",
     });
 
     setForm({
       title: "",
-      flight: "",
+      flight_number: "",
       severity: "Medium",
       team: "",
     });
@@ -67,7 +78,9 @@ function Incidents() {
       <div className="header">
         <div>
           <h1>Incident Management</h1>
-          <p>Track and resolve airport operational disruptions</p>
+          <p>
+            Track and resolve airport operational disruptions
+          </p>
         </div>
 
         <span className="live">● LIVE</span>
@@ -123,8 +136,8 @@ function Incidents() {
             <label>
               Flight
               <input
-                name="flight"
-                value={form.flight}
+                name="flight_number"
+                value={form.flight_number}
                 onChange={handleChange}
                 placeholder="e.g. AI302"
               />
@@ -174,17 +187,22 @@ function Incidents() {
               className={`incident-card ${incident.severity.toLowerCase()}`}
             >
               <div>
-                <small>{incident.id}</small>
+                <small>
+                  {incident.incident_code}
+                </small>
 
                 <h3>{incident.title}</h3>
 
                 <p>
-                  Flight {incident.flight} • {incident.team}
+                  Flight {incident.flight_number} •{" "}
+                  {incident.team}
                 </p>
               </div>
 
               <div className="incident-actions">
-                <strong>{incident.severity}</strong>
+                <strong>
+                  {incident.severity}
+                </strong>
 
                 <span>{incident.status}</span>
 

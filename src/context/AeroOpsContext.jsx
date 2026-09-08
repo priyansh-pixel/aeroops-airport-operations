@@ -5,172 +5,187 @@ import {
   useState,
 } from "react";
 
+import { supabase } from "../lib/supabaseClient";
+
 const AeroOpsContext = createContext();
 
-const defaultFlights = [
-  {
-    flight: "AI302",
-    airline: "Air India",
-    origin: "Mumbai",
-    destination: "Delhi",
-    gate: "G08",
-    status: "Boarding",
-    delay: 14,
-    risk: "High",
-  },
-  {
-    flight: "6E415",
-    airline: "IndiGo",
-    origin: "Bengaluru",
-    destination: "Delhi",
-    gate: "G12",
-    status: "Turnaround",
-    delay: 6,
-    risk: "Medium",
-  },
-  {
-    flight: "AI506",
-    airline: "Air India",
-    origin: "Hyderabad",
-    destination: "Delhi",
-    gate: "G10",
-    status: "Arriving",
-    delay: 0,
-    risk: "Low",
-  },
-];
-
-const defaultIncidents = [
-  {
-    id: "INC-001",
-    title: "Fueling equipment delay",
-    flight: "AI302",
-    severity: "High",
-    team: "Fuel Team F4",
-    status: "Open",
-  },
-  {
-    id: "INC-002",
-    title: "Baggage belt congestion",
-    flight: "6E415",
-    severity: "Medium",
-    team: "Baggage Team B7",
-    status: "In Progress",
-  },
-];
-
-function loadData(key, fallback) {
-  try {
-    const saved = localStorage.getItem(key);
-
-    return saved ? JSON.parse(saved) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
 export function AeroOpsProvider({ children }) {
-  const [flights, setFlights] = useState(() =>
-    loadData("aeroops-flights", defaultFlights)
-  );
+  const [flights, setFlights] = useState([]);
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [incidents, setIncidents] = useState(() =>
-    loadData("aeroops-incidents", defaultIncidents)
-  );
+  async function loadData() {
+    setLoading(true);
 
-  useEffect(() => {
-    localStorage.setItem(
-      "aeroops-flights",
-      JSON.stringify(flights)
-    );
-  }, [flights]);
+    const [
+      { data: flightData, error: flightError },
+      { data: incidentData, error: incidentError },
+    ] = await Promise.all([
+      supabase
+        .from("flights")
+        .select("*")
+        .order("id", { ascending: true }),
 
-  useEffect(() => {
-    localStorage.setItem(
-      "aeroops-incidents",
-      JSON.stringify(incidents)
-    );
-  }, [incidents]);
-
-  function addIncident(incident) {
-    setIncidents((current) => [
-      incident,
-      ...current,
+      supabase
+        .from("incidents")
+        .select("*")
+        .order("id", { ascending: false }),
     ]);
 
-    if (
-      incident.severity === "High" ||
-      incident.severity === "Critical"
-    ) {
-      setFlights((current) =>
-        current.map((flight) =>
-          flight.flight === incident.flight
-            ? {
-                ...flight,
-                risk: "High",
-                status: "Operational Risk",
-              }
-            : flight
-        )
+    if (flightError) {
+      console.error("Flights error:", flightError);
+    }
+
+    if (incidentError) {
+      console.error("Incidents error:", incidentError);
+    }
+
+    setFlights(flightData || []);
+    setIncidents(incidentData || []);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+  loadData();
+
+  const channel = supabase
+    .channel("aeroops-realtime")
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "flights",
+      },
+      () => {
+        loadData();
+      }
+    )
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "incidents",
+      },
+      () => {
+        loadData();
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, []);
+
+  async function addIncident(incident) {
+      console.log("Trying to create incident:", incident);
+
+  const { data, error } = await supabase
+    .from("incidents")
+    .insert([incident])
+    .select();
+
+  if (error) {
+    console.error("Add incident error:", error);
+
+    alert(
+      `Incident could not be created:\n${error.message}`
+    );
+
+    return false;
+  }
+
+  console.log("Incident created successfully:", data);
+
+  if (
+    incident.severity === "High" ||
+    incident.severity === "Critical"
+  ) {
+    const { error: flightUpdateError } = await supabase
+      .from("flights")
+      .update({
+        risk: "High",
+        status: "Operational Risk",
+      })
+      .eq(
+        "flight_number",
+        incident.flight_number
+      );
+
+    if (flightUpdateError) {
+      console.error(
+        "Flight update error:",
+        flightUpdateError
       );
     }
   }
 
-  function resolveIncident(id) {
-    const incident = incidents.find(
-      (item) => item.id === id
-    );
+  await loadData();
 
-    if (!incident) return;
-
-    setIncidents((current) =>
-      current.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              status: "Resolved",
-            }
-          : item
-      )
-    );
-
-    const remainingSeriousIncidents =
-      incidents.filter(
-        (item) =>
-          item.flight === incident.flight &&
-          item.id !== id &&
-          item.status !== "Resolved" &&
-          ["High", "Critical"].includes(
-            item.severity
-          )
-      );
-
-    if (remainingSeriousIncidents.length === 0) {
-      setFlights((current) =>
-        current.map((flight) =>
-          flight.flight === incident.flight
-            ? {
-                ...flight,
-                risk:
-                  flight.delay > 10
-                    ? "Medium"
-                    : flight.delay > 0
-                    ? "Medium"
-                    : "Low",
-                status:
-                  flight.delay > 0
-                    ? "Turnaround"
-                    : "Arriving",
-              }
-            : flight
-        )
-      );
-    }
+  return true;
   }
 
-  function resetDemoData() {
-    setFlights(defaultFlights);
-    setIncidents(defaultIncidents);
+  async function resolveIncident(id) {
+    const { data: incident, error } = await supabase
+      .from("incidents")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error || !incident) {
+      console.error("Incident lookup error:", error);
+      return;
+    }
+
+    await supabase
+      .from("incidents")
+      .update({
+        status: "Resolved",
+      })
+      .eq("id", id);
+
+    const {
+      data: seriousIncidents,
+      error: seriousError,
+    } = await supabase
+      .from("incidents")
+      .select("*")
+      .eq("flight_number", incident.flight_number)
+      .neq("status", "Resolved")
+      .in("severity", ["High", "Critical"]);
+
+    if (seriousError) {
+      console.error(seriousError);
+    }
+
+    if (!seriousIncidents || seriousIncidents.length === 0) {
+      const { data: flight } = await supabase
+        .from("flights")
+        .select("*")
+        .eq("flight_number", incident.flight_number)
+        .single();
+
+      if (flight) {
+        await supabase
+          .from("flights")
+          .update({
+            risk:
+              flight.delay_minutes > 0
+                ? "Medium"
+                : "Low",
+
+            status:
+              flight.delay_minutes > 0
+                ? "Turnaround"
+                : "Arriving",
+          })
+          .eq("flight_number", incident.flight_number);
+      }
+    }
+
+    await loadData();
   }
 
   return (
@@ -178,9 +193,10 @@ export function AeroOpsProvider({ children }) {
       value={{
         flights,
         incidents,
+        loading,
         addIncident,
         resolveIncident,
-        resetDemoData,
+        reloadData: loadData,
       }}
     >
       {children}
