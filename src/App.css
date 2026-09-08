@@ -1,242 +1,563 @@
+/* =========================================================
+   AEROOPS - GLOBAL
+   ========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html {
+  background: #07101d;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b1220;
-  color: white;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #07101d;
+  color: #f8fafc;
 }
+
+/* =========================================================
+   APP LAYOUT
+   ========================================================= */
 
 .app {
   display: flex;
+  width: 100%;
   min-height: 100vh;
+  background: #07101d;
 }
 
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
 .sidebar {
-  width: 220px;
-  background: #111827;
-  padding: 24px 16px;
-  border-right: 1px solid #1f2937;
+  width: 250px;
+  min-width: 250px;
+  min-height: 100vh;
+
+  position: sticky;
+  top: 0;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px 18px;
+
+  background: #0d1726;
+
+  border-right: 1px solid #1e293b;
 }
 
 .sidebar h2 {
+  margin: 0 14px 34px;
+
   color: #38bdf8;
-  margin-top: 0;
-  margin-bottom: 30px;
+
+  font-size: 28px;
+  letter-spacing: -0.5px;
 }
 
 .sidebar nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .sidebar a {
-  background: transparent;
-  color: #cbd5e1;
-  border: none;
-  text-align: left;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  text-decoration: none;
   display: block;
+
+  padding: 13px 14px;
+
+  color: #cbd5e1;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  border-radius: 9px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebar a:hover {
-  background: #1e293b;
+  background: #172337;
+  color: #ffffff;
 }
 
 .sidebar a.active {
-  background: #1e293b;
   color: #38bdf8;
+  background: #1e2c41;
 }
+
+.logout-button {
+  margin: 35px 14px 0;
+
+  padding: 11px 14px;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  background: transparent;
+  color: white;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
 
 .main {
   flex: 1;
-  padding: 24px;
-  overflow: hidden;
+
+  width: calc(100% - 250px);
+
+  min-width: 0;
+
+  padding: 30px 36px 60px;
+
+  overflow-x: hidden;
+
+  background: #07101d;
 }
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  margin-bottom: 8px;
 }
 
 .header h1 {
   margin: 0 0 6px;
-  font-size: 28px;
+
+  font-size: clamp(24px, 2vw, 34px);
+
+  font-weight: 700;
+
+  letter-spacing: -0.7px;
 }
 
 .header p {
-  color: #94a3b8;
   margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 15px;
 }
 
 .live {
+  display: inline-flex;
+  align-items: center;
+
+  white-space: nowrap;
+
   color: #22c55e;
-  font-weight: bold;
+
+  font-size: 15px;
+  font-weight: 700;
 }
+
+/* =========================================================
+   KPI GRID
+   ========================================================= */
 
 .kpis {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 30px;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-top: 28px;
 }
 
 .card {
-  background: #111827;
-  border: 1px solid #1f2937;
-  padding: 20px;
-  border-radius: 12px;
+  min-width: 0;
+
+  padding: 22px;
+
+  background: #0f1929;
+
+  border: 1px solid #1f2d40;
+  border-radius: 14px;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #334155;
 }
 
 .card p {
-  color: #94a3b8;
   margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 14px;
 }
 
 .card h2 {
-  margin: 10px 0 0;
-  font-size: 26px;
+  margin: 10px 0 4px;
+
+  font-size: 30px;
 }
 
+.card small {
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
 .panel {
-  background: #111827;
-  border: 1px solid #1f2937;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 20px;
+  width: 100%;
+
+  margin-top: 22px;
+
+  padding: 24px;
+
+  background: #0f1929;
+
+  border: 1px solid #1f2d40;
+  border-radius: 14px;
+
   overflow-x: auto;
+}
+
+.panel h1,
+.panel h2,
+.panel h3 {
+  color: #f8fafc;
 }
 
 .panel h2 {
   margin-top: 0;
 }
 
+/* =========================================================
+   TABLES
+   ========================================================= */
+
 table {
   width: 100%;
+
+  margin-top: 16px;
+
   border-collapse: collapse;
-  margin-top: 15px;
 }
 
 th,
 td {
+  padding: 13px 14px;
+
   text-align: left;
-  padding: 12px;
-  border-bottom: 1px solid #1f2937;
+
+  border-bottom: 1px solid #1e293b;
+
   white-space: nowrap;
 }
 
 th {
   color: #94a3b8;
+
+  font-size: 13px;
+  font-weight: 600;
 }
 
+td {
+  color: #e2e8f0;
+
+  font-size: 14px;
+}
+
+tbody tr:hover {
+  background: rgba(30, 41, 59, 0.35);
+}
+
+/* =========================================================
+   BADGES / RISK
+   ========================================================= */
+
+.badge,
 .risk {
+  display: inline-flex;
+
+  align-items: center;
+
   padding: 6px 10px;
-  border-radius: 6px;
+
+  border-radius: 999px;
+
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-.risk.high {
-  background: #7f1d1d;
+.risk.high,
+.badge.danger {
+  color: #fecaca;
+  background: #450a0a;
+
+  border: 1px solid #7f1d1d;
 }
 
-.risk.medium {
-  background: #78350f;
+.risk.medium,
+.badge.warning {
+  color: #fde68a;
+  background: #422006;
+
+  border: 1px solid #78350f;
 }
 
-.risk.low {
-  background: #14532d;
+.risk.low,
+.badge.success {
+  color: #bbf7d0;
+  background: #052e16;
+
+  border: 1px solid #166534;
 }
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
 
 .alert {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 8px;
+  margin-top: 12px;
+
+  padding: 15px 16px;
+
+  border-radius: 10px;
+
+  line-height: 1.5;
+}
+
+.alert h3 {
+  margin: 8px 0;
+}
+
+.alert p {
+  margin: 5px 0;
 }
 
 .alert.danger {
+  color: #fee2e2;
+
   background: #450a0a;
+
+  border: 1px solid #7f1d1d;
 }
 
 .alert.warning {
+  color: #fef3c7;
+
   background: #422006;
+
+  border: 1px solid #78350f;
 }
 
-@media (max-width: 768px) {
-  .app {
-    flex-direction: column;
-  }
+.alert.success {
+  color: #dcfce7;
 
-  .sidebar {
-    width: 100%;
-    padding: 16px;
-  }
+  background: #052e16;
 
-  .sidebar h2 {
-    margin-bottom: 15px;
-  }
-
-  .sidebar nav {
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .sidebar button {
-    white-space: nowrap;
-  }
-
-  .main {
-    padding: 16px;
-  }
-
-  .header h1 {
-    font-size: 22px;
-  }
-
-  .kpis {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .card {
-    padding: 15px;
-  }
+  border: 1px solid #166534;
 }
+
+/* =========================================================
+   GENERAL BUTTONS
+   ========================================================= */
+
+button {
+  font-family: inherit;
+}
+
+.primary-button {
+  margin-top: 18px;
+
+  padding: 11px 17px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: #38bdf8;
+  color: #06111f;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #7dd3fc;
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   FLIGHTS
+   ========================================================= */
+
+.flight-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-top: 18px;
+}
+
+.flight-card {
+  min-width: 0;
+
+  padding: 20px;
+
+  background: #0b1524;
+
+  border: 1px solid #26364b;
+  border-radius: 12px;
+}
+
+.flight-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+.flight-top h2 {
+  margin: 0 0 4px;
+
+  font-size: 22px;
+}
+
+.flight-top p {
+  margin: 0;
+
+  color: #94a3b8;
+}
+
+.flight-card small {
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.flight-card p {
+  color: #cbd5e1;
+}
+
+/* =========================================================
+   GATES
+   ========================================================= */
+
 .gate-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+
   margin-top: 20px;
 }
 
 .gate-card {
-  padding: 18px;
-  border-radius: 10px;
+  min-width: 0;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
   border: 1px solid #334155;
-  background: #0f172a;
+
+  background: #0b1524;
 }
 
 .gate-top {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
 }
 
 .gate-top h2 {
   margin: 0;
+
+  font-size: 22px;
 }
 
 .gate-top span {
-  font-size: 12px;
-  padding: 5px 8px;
-  border-radius: 5px;
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.gate-card p {
+  color: #cbd5e1;
 }
 
 .gate-card.available {
@@ -257,6 +578,7 @@ th {
 
 .gate-card.conflict {
   border-left: 4px solid #ef4444;
+
   background: #220d12;
 }
 
@@ -264,17 +586,41 @@ th {
   color: #ef4444;
 }
 
+/* Gate selector */
+
+.gate-card select {
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  background: #07101d;
+  color: white;
+
+  outline: none;
+}
+
+/* =========================================================
+   GATE CONFLICT
+   ========================================================= */
+
 .conflict-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 22px;
+
   margin-top: 20px;
-  padding: 18px;
-  border: 1px solid #ef4444;
-  border-radius: 12px;
+
+  padding: 20px;
+
   background: #2b1014;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  border: 1px solid #ef4444;
+  border-radius: 12px;
 }
 
 .conflict-box strong {
@@ -286,71 +632,93 @@ th {
 }
 
 .conflict-box button {
+  flex-shrink: 0;
+
+  padding: 12px 17px;
+
   border: 0;
-  background: #38bdf8;
-  padding: 12px 16px;
   border-radius: 8px;
-  font-weight: bold;
+
+  background: #38bdf8;
+  color: #06111f;
+
+  font-weight: 700;
+
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .gate-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* =========================================================
+   TURNAROUND
+   ========================================================= */
 
-  .conflict-box {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .conflict-box button {
-    width: 100%;
-  }
-}
 .turnaround-heading {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.turnaround-heading h2 {
+  margin-bottom: 5px;
 }
 
 .turnaround-heading p {
+  margin: 0;
+
   color: #94a3b8;
 }
 
 .progress-track {
   width: 100%;
   height: 12px;
-  background: #1e293b;
-  border-radius: 20px;
+
   overflow: hidden;
+
+  background: #1e293b;
+
+  border-radius: 999px;
 }
 
 .progress-fill {
   height: 100%;
+
   background: #22c55e;
-  border-radius: 20px;
+
+  border-radius: 999px;
+
   transition: width 0.4s ease;
 }
 
 .risk-box {
+  width: 100%;
+
   margin-top: 20px;
-  padding: 18px;
+
+  padding: 20px;
+
   border-radius: 12px;
+}
+
+.risk-box h2 {
+  margin-top: 0;
 }
 
 .risk-box.high {
   background: #2b1014;
+
   border: 1px solid #ef4444;
 }
 
 .risk-box.medium {
   background: #422006;
+
   border: 1px solid #f59e0b;
 }
 
 .risk-box.low {
   background: #052e16;
+
   border: 1px solid #22c55e;
 }
 
@@ -358,21 +726,32 @@ th {
   color: #cbd5e1;
 }
 
+/* =========================================================
+   TURNAROUND TASKS
+   ========================================================= */
+
 .task-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+
+  gap: 14px;
+
+  margin-top: 18px;
 }
 
 .task-card {
-  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 22px;
+
+  padding: 18px;
+
+  background: #0b1524;
+
   border: 1px solid #334155;
   border-radius: 10px;
-  padding: 16px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .task-card.completed {
@@ -391,19 +770,28 @@ th {
   border-left: 4px solid #64748b;
 }
 
+.task-info {
+  min-width: 0;
+}
+
 .task-info h3 {
-  margin: 0 0 6px;
+  margin: 0 0 7px;
 }
 
 .task-info p {
-  margin: 0;
+  margin: 4px 0;
+
   color: #94a3b8;
 }
 
 .task-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
 }
 
 .task-actions small {
@@ -411,72 +799,95 @@ th {
 }
 
 .task-actions button {
-  background: #38bdf8;
+  padding: 9px 12px;
+
   border: 0;
-  padding: 8px 12px;
   border-radius: 7px;
-  font-weight: bold;
-}
 
-@media (max-width: 768px) {
-  .task-card {
-    align-items: flex-start;
-    gap: 15px;
-    flex-direction: column;
-  }
-
-  .task-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-.primary-button {
-  margin-top: 20px;
   background: #38bdf8;
-  border: 0;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-weight: bold;
+  color: #06111f;
+
+  font-weight: 700;
+
   cursor: pointer;
 }
 
+.task-actions button:hover {
+  background: #7dd3fc;
+}
+
+/* =========================================================
+   INCIDENT FORM
+   ========================================================= */
+
 .incident-form {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
 }
 
 .incident-form label {
   display: flex;
   flex-direction: column;
+
   gap: 8px;
+
   color: #94a3b8;
+
+  font-size: 14px;
 }
 
 .incident-form input,
 .incident-form select {
-  background: #0f172a;
-  color: white;
+  width: 100%;
+
+  padding: 12px 13px;
+
   border: 1px solid #334155;
   border-radius: 8px;
-  padding: 12px;
+
+  outline: none;
+
+  background: #07101d;
+  color: white;
+
   font-size: 15px;
 }
+
+.incident-form input:focus,
+.incident-form select:focus {
+  border-color: #38bdf8;
+}
+
+/* =========================================================
+   INCIDENT LIST
+   ========================================================= */
 
 .incident-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+
+  gap: 14px;
+
+  margin-top: 18px;
 }
 
 .incident-card {
-  padding: 16px;
-  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 18px;
+
+  background: #0b1524;
+
   border: 1px solid #334155;
   border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .incident-card h3 {
@@ -484,8 +895,9 @@ th {
 }
 
 .incident-card p {
+  margin: 4px 0;
+
   color: #94a3b8;
-  margin: 0;
 }
 
 .incident-card.critical {
@@ -507,74 +919,60 @@ th {
 .incident-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
 }
 
 .incident-actions button {
-  border: 0;
-  background: #334155;
+  padding: 9px 12px;
+
+  border: 1px solid #475569;
+  border-radius: 7px;
+
+  background: #26364b;
   color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.incident-actions button:hover {
+  background: #334155;
 }
 
 .severity {
-  font-weight: bold;
+  font-weight: 700;
 }
 
-@media (max-width: 768px) {
-  .incident-form {
-    grid-template-columns: 1fr;
-  }
-
-  .incident-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .incident-actions {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-}
-@media (max-width: 768px) {
-  .panel {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table {
-    min-width: 760px;
-  }
-
-  th,
-  td {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-.alert.success {
-  background: #052e16;
-  border: 1px solid #22c55e;
-}
+/* =========================================================
+   RISK FLIGHTS
+   ========================================================= */
 
 .risk-flight-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+
+  gap: 14px;
+
+  margin-top: 18px;
 }
 
 .risk-flight-card {
-  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding: 18px;
+
+  background: #0b1524;
+
   border: 1px solid #334155;
   border-left: 5px solid #ef4444;
-  border-radius: 10px;
-  padding: 16px;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-radius: 10px;
 }
 
 .risk-flight-card h3 {
@@ -583,86 +981,380 @@ th {
 
 .risk-flight-card p {
   margin: 0;
+
   color: #94a3b8;
 }
 
 .risk-flight-card > div:last-child {
   display: flex;
-  gap: 12px;
+
   align-items: center;
+
+  gap: 12px;
 }
 
-@media (max-width: 768px) {
-  .risk-flight-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-}
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
 .login-page {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #07111f;
+
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 24px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #10243d 0%,
+      #07111f 45%,
+      #050b14 100%
+    );
 }
 
 .login-card {
   width: 100%;
-  max-width: 420px;
-  padding: 32px;
+  max-width: 430px;
+
+  padding: 38px;
+
+  text-align: center;
+
   background: #101b2d;
+
   border: 1px solid #223047;
   border-radius: 16px;
-  text-align: center;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.35);
 }
 
 .login-card h1 {
+  margin: 0 0 8px;
+
   color: #38bdf8;
-  margin-bottom: 8px;
+
+  font-size: 34px;
 }
 
 .login-card p {
+  margin: 0;
+
   color: #9fb3cf;
 }
 
 .login-card form {
   display: flex;
   flex-direction: column;
+
   gap: 16px;
-  margin-top: 24px;
+
+  margin-top: 26px;
 }
 
 .login-card input {
+  width: 100%;
+
   padding: 14px;
-  border-radius: 8px;
+
   border: 1px solid #33445f;
+  border-radius: 8px;
+
+  outline: none;
+
   background: #0b1526;
   color: white;
-  font-size: 16px;
+
+  font-size: 15px;
+}
+
+.login-card input:focus {
+  border-color: #38bdf8;
 }
 
 .login-card button {
   padding: 14px;
+
   border: none;
   border-radius: 8px;
+
   background: #38bdf8;
   color: #06111f;
+
+  font-size: 15px;
   font-weight: 700;
+
   cursor: pointer;
+}
+
+.login-card button:hover {
+  background: #7dd3fc;
 }
 
 .login-error {
+  margin-top: 16px !important;
+
   color: #ff6b6b !important;
-  margin-top: 16px;
 }
 
-.logout-button {
-  margin: 30px 20px;
-  padding: 10px;
-  border: 1px solid #33445f;
-  border-radius: 8px;
-  background: transparent;
-  color: white;
-  cursor: pointer;
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1500px) {
+  .sidebar {
+    width: 270px;
+    min-width: 270px;
+  }
+
+  .main {
+    width: calc(100% - 270px);
+
+    padding-left: 44px;
+    padding-right: 44px;
+  }
+
+  .kpis {
+    gap: 20px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+  .panel {
+    padding: 26px;
+  }
+
+  .gate-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .flight-list {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   MEDIUM / LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .main {
+    width: calc(100% - 220px);
+
+    padding: 26px;
+  }
+
+  .kpis {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .gate-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .flight-list {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    min-height: auto;
+
+    padding: 16px 18px;
+
+    border-right: 0;
+    border-bottom: 1px solid #1f2937;
+  }
+
+  .sidebar h2 {
+    margin: 0 0 15px;
+
+    font-size: 24px;
+  }
+
+  .sidebar nav {
+    flex-direction: row;
+
+    gap: 8px;
+
+    overflow-x: auto;
+
+    padding-bottom: 4px;
+  }
+
+  .sidebar a {
+    flex-shrink: 0;
+
+    white-space: nowrap;
+  }
+
+  .logout-button {
+    margin: 12px 0 0;
+
+    width: auto;
+  }
+
+  .main {
+    width: 100%;
+
+    padding: 22px;
+  }
+
+  .header {
+    align-items: flex-start;
+  }
+
+  .gate-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .flight-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+  .main {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .header h1 {
+    font-size: 23px;
+  }
+
+  .kpis {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+  }
+
+  .card {
+    padding: 17px;
+  }
+
+  .panel {
+    padding: 17px;
+  }
+
+  .gate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .incident-form {
+    grid-template-columns: 1fr;
+  }
+
+  .conflict-box {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .conflict-box button {
+    width: 100%;
+  }
+
+  .turnaround-heading {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .task-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    width: 100%;
+
+    justify-content: flex-start;
+  }
+
+  .incident-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .incident-actions {
+    width: 100%;
+  }
+
+  .risk-flight-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .flight-top {
+    flex-direction: column;
+  }
+
+  table {
+    min-width: 760px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+
+    font-size: 13px;
+  }
+
+  .login-page {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 26px 20px;
+  }
+
+  .login-card h1 {
+    font-size: 30px;
+  }
 }
